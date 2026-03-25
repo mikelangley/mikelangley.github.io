@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mike Langley | Web, Design & Operations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --cream-dark: #EDE7D9;
+    --ink: #1C1A17;
+    --ink-light: #4A4540;
+    --terracotta: #C4622D;
+    --amber: #E8A838;
+    --sage: #7A8C6E;
+    --warm-white: #FDFAF5;
+    --border: rgba(28,26,23,0.12);
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.25rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(245,240,232,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--terracotta); font-style: italic; }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--terracotta); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 3rem 6rem 5rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.35s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--terracotta);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--ink-light);
+    max-width: 420px;
+    line-height: 1.75;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.5s forwards;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.65s forwards;
+  }
+
+  .btn-primary {
+    background: var(--terracotta);
+    color: white;
+    padding: 0.85rem 2rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover { background: #a84f22; transform: translateY(-2px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--ink);
+    padding: 0.85rem 2rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    border: 1.5px solid var(--border);
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+
+  .btn-outline:hover { border-color: var(--terracotta); transform: translateY(-2px); }
+
+  .hero-right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-graphic {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--amber) 0%, var(--terracotta) 50%, #8B3A1A 100%);
+    opacity: 0;
+    animation: fadeIn 1.2s ease 0.1s forwards;
+  }
+
+  .hero-graphic::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.05) 40px,
+      rgba(255,255,255,0.05) 41px
+    );
+  }
+
+  .hero-initials {
+    position: relative;
+    z-index: 2;
+    font-family: var(--serif);
+    font-size: clamp(8rem, 15vw, 16rem);
+    font-weight: 700;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: -0.05em;
+    line-height: 1;
+    user-select: none;
+    animation: fadeIn 1s ease 0.5s forwards;
+    opacity: 0;
+  }
+
+  .hero-badge {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 2.5rem;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    color: white;
+    font-size: 0.8rem;
+    z-index: 3;
+  }
+
+  .hero-badge strong {
+    display: block;
+    font-size: 1.4rem;
+    font-family: var(--serif);
+    font-weight: 700;
+    margin-bottom: 0.1rem;
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 6rem 5rem; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 3rem;
+  }
+
+  .section-title em { font-style: italic; color: var(--terracotta); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 5rem;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--warm-white);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .about-text p {
+    color: var(--ink-light);
+    margin-bottom: 1.25rem;
+    font-size: 1.05rem;
+  }
+
+  .about-text p strong { color: var(--ink); font-weight: 500; }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .stat-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(28,26,23,0.08); }
+
+  .stat-number {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--terracotta);
+    line-height: 1;
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-label {
+    font-size: 0.82rem;
+    color: var(--ink-light);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── EXPERIENCE TIMELINE ── */
+  #experience { background: var(--cream); }
+
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--terracotta), var(--amber), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding: 0 0 3.5rem 2.5rem;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .timeline-item.visible { opacity: 1; transform: translateX(0); }
+
+  .timeline-dot {
+    position: absolute;
+    left: -2rem;
+    top: 6px;
+    width: 13px;
+    height: 13px;
+    background: var(--terracotta);
+    border-radius: 50%;
+    border: 3px solid var(--cream);
+    box-shadow: 0 0 0 1px var(--terracotta);
+  }
+
+  .timeline-date {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--terracotta);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .timeline-role {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+
+  .timeline-company {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+  }
+
+  .timeline-desc {
+    font-size: 0.95rem;
+    color: var(--ink-light);
+    max-width: 600px;
+    line-height: 1.7;
+  }
+
+  .timeline-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+  }
+
+  .tag {
+    background: var(--cream-dark);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 0.25rem 0.85rem;
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--warm-white); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.25s;
+  }
+
+  .project-card.visible { opacity: 1; transform: translateY(0); }
+  .project-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(28,26,23,0.1); }
+
+  .project-thumb {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-thumb-1 { background: linear-gradient(135deg, #C4622D22, #E8A83822); }
+  .project-thumb-2 { background: linear-gradient(135deg, #7A8C6E22, #C4622D22); }
+  .project-thumb-3 { background: linear-gradient(135deg, #E8A83822, #7A8C6E22); }
+  .project-thumb-4 { background: linear-gradient(135deg, #1C1A1711, #C4622D22); }
+  .project-thumb-5 { background: linear-gradient(135deg, #C4622D22, #1C1A1711); }
+  .project-thumb-6 { background: linear-gradient(135deg, #7A8C6E11, #E8A83833); }
+
+  .project-body { padding: 1.5rem; }
+
+  .project-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 0.4rem;
+  }
+
+  .project-name {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-desc {
+    font-size: 0.88rem;
+    color: var(--ink-light);
+    line-height: 1.65;
+  }
+
+  /* ── SKILLS ── */
+  #skills { background: var(--cream); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+
+  .skill-group {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .skill-group.visible { opacity: 1; transform: translateY(0); }
+
+  .skill-group-title {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .skill-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .skill-list li {
+    font-size: 0.875rem;
+    color: var(--ink-light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .skill-list li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: var(--terracotta);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: var(--ink);
+    color: var(--cream);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  #contact .section-label { color: var(--amber); }
+  #contact .section-title { color: var(--cream); margin-bottom: 1.5rem; }
+
+  .contact-intro {
+    font-size: 1rem;
+    color: rgba(245,240,232,0.85);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: rgba(245,240,232,0.9);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .contact-link:hover { color: var(--amber); }
+
+  .contact-link-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(245,240,232,0.08);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .form-group label {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.7);
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: rgba(245,240,232,0.06);
+    border: 1px solid rgba(245,240,232,0.12);
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    color: var(--cream);
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(245,240,232,0.25); }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--amber); }
+
+  .form-group select option { background: #2A2820; }
+
+  .form-submit {
+    background: var(--terracotta);
+    color: white;
+    border: none;
+    padding: 0.9rem 2rem;
+    border-radius: 6px;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    align-self: flex-start;
+  }
+
+  .form-submit:hover { background: #a84f22; transform: translateY(-2px); }
+
+  .form-success {
+    display: none;
+    background: rgba(122,140,110,0.2);
+    border: 1px solid rgba(122,140,110,0.4);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    color: #B5C9A6;
+    font-size: 0.9rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #141210;
+    color: rgba(245,240,232,0.3);
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.5rem; }
+    #hero { grid-template-columns: 1fr; }
+    .hero-right { height: 320px; }
+    .hero-left { padding: 4rem 1.5rem 3rem; }
+    section { padding: 4rem 1.5rem; }
+    .divider { margin: 0 1.5rem; }
+    #about { grid-template-columns: 1fr; gap: 2.5rem; }
+    .projects-grid { grid-template-columns: 1fr 1fr; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    #contact { grid-template-columns: 1fr; gap: 3rem; }
+  }
+
+  @media (max-width: 560px) {
+    .nav-links { display: none; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">Mike <span>Langley</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Available for remote roles &nbsp;|&nbsp; NH / Boston area</p>
+    <h1 class="hero-title">Web, Design<br>& <em>Operations</em></h1>
+    <p class="hero-sub">
+      Full-stack generalist with 10+ years building digital products, managing operations, and leading end-to-end web projects — from print runs to blockchain concepts.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View My Work</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-graphic"></div>
+    <div class="hero-initials">ML</div>
+    <div class="hero-badge">
+      <strong>10+</strong>
+      Years of experience
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-text">
+    <p class="section-label">About Me</p>
+    <h2 class="section-title">Builder. Operator.<br><em>Problem Solver.</em></h2>
+    <p>I'm a New Hampshire-based digital professional who's worn every hat in the shop — from running print presses and managing warehouse logistics, to building web platforms and experimenting with smart contract concepts on the blockchain.</p>
+    <p>I founded <strong>Mike Langley Web Design LLC</strong>, co-developed a blockchain property concept with <strong>Coinshark / Bitsmart</strong>, and spent years as the digital backbone of <strong>WG Ellerkamp</strong>, where I owned the website, design, software, and customer operations simultaneously.</p>
+    <p>I'm currently targeting <strong>remote-first roles</strong> with companies in the Boston/Cambridge tech corridor — where my range translates into real impact.</p>
+  </div>
+  <div class="about-stats">
+    <div class="stat-card">
+      <div class="stat-number">10+</div>
+      <div class="stat-label">Years in web & digital</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">50+</div>
+      <div class="stat-label">Businesses supported</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">∞</div>
+      <div class="stat-label">Hats worn at once</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">1</div>
+      <div class="stat-label">Company founded</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE TIMELINE -->
+<section id="experience">
+  <p class="section-label">Career</p>
+  <h2 class="section-title">Work <em>Experience</em></h2>
+
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">2010 – Present</div>
+      <div class="timeline-role">Founder & Web Designer</div>
+      <div class="timeline-company">Mike Langley Web Design LLC · New Hampshire</div>
+      <div class="timeline-desc">
+        Founded and operated a boutique web design agency serving local and regional clients. Delivered end-to-end web solutions including design, development, hosting, SEO, and ongoing maintenance.
+      </div>
+      <div class="timeline-tags">
+        <span class="tag">Web Design</span>
+        <span class="tag">UX/UI</span>
+        <span class="tag">Client Relations</span>
+        <span class="tag">WordPress</span>
+        <span class="tag">HTML/CSS/JS</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Startup Phase</div>
+      <div class="timeline-role">Co-Founder / Product Lead</div>
+      <div class="timeline-company">Coinshark / Bitsmart, Blockchain Startup</div>
+      <div class="timeline-desc">
+        Co-developed a "smart property" concept leveraging blockchain to tokenize real-world assets. Contributed to product strategy, UI design, and the technical architecture of the platform.
+      </div>
+      <div class="timeline-tags">
+        <span class="tag">Blockchain</span>
+        <span class="tag">Smart Contracts</span>
+        <span class="tag">Product Strategy</span>
+        <span class="tag">Web3</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Multi-year tenure, until Sep 2024</div>
+      <div class="timeline-role">Digital & Operations Lead</div>
+      <div class="timeline-company">WG Ellerkamp, Retail Packaging Distributor & Printer</div>
+      <div class="timeline-desc">
+        Served as the digital backbone and operations multi-tool for this regional packaging and printing company. Built and managed the company website, handled print press operation, customer service, sales, warehouse logistics, and internal software systems.
+      </div>
+      <div class="timeline-tags">
+        <span class="tag">Web Management</span>
+        <span class="tag">Print Production</span>
+        <span class="tag">Logistics</span>
+        <span class="tag">Customer Service</span>
+        <span class="tag">Sales</span>
+        <span class="tag">Operations</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label">Portfolio</p>
+  <h2 class="section-title">Selected <em>Projects</em></h2>
+
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-thumb project-thumb-1">🌐</div>
+      <div class="project-body">
+        <div class="project-label">Web Design Agency</div>
+        <div class="project-name">Mike Langley Web Design</div>
+        <div class="project-desc">Full-service local web agency: design, build, host, and maintain. Multiple client websites delivered end-to-end.</div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb project-thumb-2">⛓️</div>
+      <div class="project-body">
+        <div class="project-label">Blockchain / Web3</div>
+        <div class="project-name">Coinshark / Bitsmart</div>
+        <div class="project-desc">Smart property tokenization concept. Built product strategy and UI for a blockchain-backed real asset platform.</div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb project-thumb-3">📦</div>
+      <div class="project-body">
+        <div class="project-label">Business Operations</div>
+        <div class="project-name">WG Ellerkamp Web Platform</div>
+        <div class="project-desc">Designed, built, and maintained a regional packaging company's full web presence alongside operational management.</div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb project-thumb-4">📊</div>
+      <div class="project-body">
+        <div class="project-label">App, In Progress</div>
+        <div class="project-name">Operations Tracker</div>
+        <div class="project-desc">A full-stack CRUD web app for managing orders, vendors, and production jobs, drawn from real-world experience.</div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb project-thumb-5">🎨</div>
+      <div class="project-body">
+        <div class="project-label">UI/UX Case Study</div>
+        <div class="project-name">SaaS Dashboard Redesign</div>
+        <div class="project-desc">From-scratch rebuild of a modern SaaS product dashboard with UX improvements and clean component architecture.</div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb project-thumb-6">⚡</div>
+      <div class="project-body">
+        <div class="project-label">Migration Case Study</div>
+        <div class="project-name">WordPress → Next.js</div>
+        <div class="project-desc">Full site migration and redesign from WordPress to Next.js, showcasing modern frontend development at scale.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label">Capabilities</p>
+  <h2 class="section-title">Skills & <em>Tools</em></h2>
+
+  <div class="skills-grid">
+    <div class="skill-group">
+      <div class="skill-group-title">🖥 Frontend</div>
+      <ul class="skill-list">
+        <li>HTML5 / CSS3</li>
+        <li>JavaScript (ES6+)</li>
+        <li>React / Next.js</li>
+        <li>Responsive Design</li>
+        <li>Accessibility (a11y)</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">🎨 Design</div>
+      <ul class="skill-list">
+        <li>UI / UX Design</li>
+        <li>Figma / Wireframing</li>
+        <li>Brand Identity</li>
+        <li>Print & Graphics</li>
+        <li>Adobe Creative Suite</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">⚙️ Platforms & CMS</div>
+      <ul class="skill-list">
+        <li>WordPress</li>
+        <li>Webflow / Framer</li>
+        <li>Shopify</li>
+        <li>cPanel / Hosting</li>
+        <li>SEO & Analytics</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">🏗 Operations</div>
+      <ul class="skill-list">
+        <li>Project Management</li>
+        <li>Warehouse Logistics</li>
+        <li>Customer Service</li>
+        <li>Sales & Onboarding</li>
+        <li>Print Production</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div>
+    <p class="section-label">Let's Talk</p>
+    <h2 class="section-title">Open to<br><em>Opportunities</em></h2>
+    <p class="contact-intro">
+      I'm actively looking for remote-friendly roles in web development, UI/UX, or digital operations, ideally with companies in the Boston/NH tech corridor. Let's see if there's a fit.
+    </p>
+    <div class="contact-links">
+      <a href="/cdn-cgi/l/email-protection#127f7b7977527f7e737c757e776b3c7c7766" class="contact-link">
+        <div class="contact-link-icon">✉</div>
+        <span class="__cf_email__" data-cfemail="b0ddd9dbd5f0dddcd1ded7dcd5c99eded5c4">[email&#160;protected]</span>
+      </a>
+      <a href="https://linkedin.com/in/mikelangley" class="contact-link" target="_blank">
+        <div class="contact-link-icon">in</div>
+        linkedin.com/in/mikelangley
+      </a>
+      <a href="https://github.com/mikelangley" class="contact-link" target="_blank">
+        <div class="contact-link-icon">&#123;&#125;</div>
+        github.com/mikelangley
+      </a>
+      <a href="#" class="contact-link">
+        <div class="contact-link-icon">&#9679;</div>
+        New Hampshire, open to remote and Boston hybrid
+      </a>
+    </div>
+  </div>
+
+  <form class="contact-form" onsubmit="handleSubmit(event)">
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" placeholder="Jane" />
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" placeholder="Smith" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" placeholder="jane@company.com" />
+    </div>
+    <div class="form-group">
+      <label>Company</label>
+      <input type="text" placeholder="HubSpot, Wayfair, etc." />
+    </div>
+    <div class="form-group">
+      <label>Reason for Reaching Out</label>
+      <select>
+        <option value="" disabled selected>Select one...</option>
+        <option>Job Opportunity</option>
+        <option>Freelance Project</option>
+        <option>Collaboration</option>
+        <option>Just saying hi</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Message</label>
+      <textarea rows="4" placeholder="Tell me about the role or project..."></textarea>
+    </div>
+    <button type="submit" class="form-submit">Send Message</button>
+    <div class="form-success" id="formSuccess">
+      ✓ Message sent! I'll get back to you within 24 hours.
+    </div>
+  </form>
+</section>
+
+<footer>
+  &copy; 2025 Mike Langley &nbsp;|&nbsp; mlangley.net &nbsp;|&nbsp; New Hampshire
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Intersection Observer for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, entry.target.dataset.delay || 0);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.timeline-item').forEach((el, i) => {
+    el.dataset.delay = i * 120;
+    observer.observe(el);
+  });
+
+  document.querySelectorAll('.project-card').forEach((el, i) => {
+    el.dataset.delay = i * 80;
+    observer.observe(el);
+  });
+
+  document.querySelectorAll('.skill-group').forEach((el, i) => {
+    el.dataset.delay = i * 80;
+    observer.observe(el);
+  });
+
+  // Form submit mock
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('formSuccess').style.display = 'block';
+    e.target.querySelectorAll('input, textarea, select').forEach(el => el.value = '');
+  }
+
+ 
